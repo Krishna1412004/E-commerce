@@ -1,24 +1,25 @@
-'use client';
+import { getProducts } from "@/sanity/lib/products/getProducts";
+import ProductsView from "@/components/ProductsView";
+import { getCategories } from "@/sanity/lib/categories/getCategories";
+import BlackFridayBanner from "@/components/ui/BlackFridayBanner";
+import CategoryFilter from "@/components/ui/CategoryFilter";
+import { CategorySelectorComponent } from "@/components/ui/category-selector";
+export default async function Home() {
+  const products = await getProducts();
+  const categories = await getCategories();
 
-import { Button } from "@/components/ui/button";
-import Header from "@/components/ui/header";
-
-export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 flex flex-col items-center justify-center p-24">
-        <div className="z-10 max-w-5xl w-full items-center justify-between">
-          <div className="flex flex-col gap-4 w-[300px]">
-            <Button variant="default">Default Button</Button>
-            <Button variant="destructive">Destructive Button</Button>
-            <Button variant="outline">Outline Button</Button>
-            <Button variant="secondary">Secondary Button</Button>
-            <Button variant="ghost">Ghost Button</Button>
-            <Button variant="link">Link Button</Button>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <BlackFridayBanner />
+      <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Latest Products</h1>
+            <CategorySelectorComponent categories={categories} />
           </div>
+          <ProductsView products={products || []} categories={categories || []} />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

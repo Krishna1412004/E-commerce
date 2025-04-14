@@ -1,9 +1,13 @@
-'use client';
+import { ReactNode } from 'react'
 
-export default function StudioLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
+type Props = {
+  children: ReactNode
+}
+
+export default function StudioLayout({ children }: Props) {
+  return (
+    <div className="h-screen w-screen">
+      {children}
+    </div>
+  )
 } 
