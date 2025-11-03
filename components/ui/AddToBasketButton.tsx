@@ -21,40 +21,32 @@ function AddToBasketButton({ product, disabled }: AddToBasketButtonProps) {
     if(!isClient) return null;
 
     return (
-        <div className="flex items-center justify-center space-x-2">
+        <div className="flex items-center justify-center gap-2">
             <button
                 onClick={() => removeItem(product._id)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
                     itemCount === 0 
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-gray-300 hover:bg-gray-400"
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-200/50 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300"
                 }`}
                 disabled={itemCount === 0 || disabled}
             >
-                <span className={`text-xl font-bold ${
-                    itemCount === 0 
-                    ? "text-gray-400" 
-                    : "text-gray-700"
-                }`}>
-                    -
-                </span>
+                <span className="text-xl font-medium">−</span>
             </button>
-            <span className="w-8 text-center font-semibold">{itemCount}</span>
+            <span className="w-10 text-center text-lg font-medium">{itemCount}</span>
             <button
                 onClick={() => addItem(product)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
                     disabled
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600"
                 }`}
                 disabled={disabled}
             >
-                <span className="text-xl font-bold text-white">
-                    +
-                </span>
+                <span className="text-white text-xl font-medium">+</span>
             </button>
         </div>
     );
-}   
+}
 
 export default AddToBasketButton;

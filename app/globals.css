@@ -55,3 +55,28 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@keyframes subtle-lift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes gentle-glow {
+  0% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@layer utilities {
+  .animate-selected {
+    animation: subtle-lift 0.3s ease forwards,
+               gentle-glow 0.3s ease forwards;
+  }
+}

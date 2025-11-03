@@ -3,11 +3,13 @@
 import { ClerkLoaded, SignedIn, SignInButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Form from "next/form";
-import { ShoppingCart, Package, Search, Info } from "lucide-react";
+import { ShoppingBag, PackageSearch, Search, Info, ShoppingBasket } from "lucide-react";
 import UserButton from "@/app/components/UserButton";
 import useBasketStore from "@/app/(store)/store/store";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
     const { user, isSignedIn } = useUser();
@@ -21,71 +23,78 @@ const Header = () => {
     return (
         <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm">
             <nav className="w-full max-w-[2000px] mx-auto h-16">
-                <div className="flex items-center justify-between h-full px-6 gap-4">
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between h-full px-8 gap-6">
+                    <div className="flex items-center gap-6">
                         <Link href="/"
-                            className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-transparent bg-clip-text hover:opacity-80 transition-opacity"
+                            className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 text-transparent bg-clip-text hover:opacity-80 transition-opacity"
                         >
-                            Shopr
+                            SmartSphere
                         </Link>
 
-                        <Link href="/about" 
-                            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
-                        >
-                            <Info className="w-5 h-5" />
-                            <span>About Us</span>
-                        </Link>
+                        <Button variant="default" size="sm" className="hidden md:inline-flex bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 min-w-[120px]" asChild>
+                            <Link href="/about" className="gap-2">
+                                <Info className="w-4 h-4" />
+                                <span>About Us</span>
+                            </Link>
+                        </Button>
                     </div>
 
-                    <Form action="/search" className="flex-1 max-w-xl">
-                        <div className="relative">
+                    <Form action="/search" className="flex-1 max-w-3xl px-4">
+                        <div className="relative w-full">
                             <input 
                                 type="text" 
                                 name="query" 
                                 placeholder="Search For Products" 
-                                className="w-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 pl-10 pr-4 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-opacity-50 border border-gray-200 dark:border-gray-700"
+                                className="w-full h-10 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 pl-11 pr-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-gray-600 focus:ring-opacity-50 border border-gray-200 dark:border-gray-800 transition-all hover:bg-gray-100 dark:hover:bg-gray-800"
                             />
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                         </div>
                     </Form>
 
                     <div className="flex items-center gap-4">
-                        <ThemeToggle />
+                        <div className="flex items-center gap-3">
+                            <ThemeToggle />
+                        </div>
 
-                        <Link
-                            href="/basket"
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
-                        >
-                            <div className="relative">
-                                <ShoppingCart className="w-5 h-5" />
-                                {mounted && items.length > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-white text-blue-500 text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                                        {items.length}
-                                    </span>
+                        <div className="flex items-center gap-4">
+                            <Button variant="default" size="sm" className="relative bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 min-w-[100px]" asChild>
+                                <Link href="/basket">
+                                    <ShoppingBag className="w-4 h-4 sm:mr-2" />
+                                    {mounted && items.length > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
+                                            {items.length}
+                                        </span>
+                                    )}
+                                    <span className="hidden sm:inline">Basket</span>
+                                </Link>
+                            </Button>
+
+                            <Button variant="default" size="sm" className="bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 min-w-[100px]" asChild>
+                                <Link href="/orders" className="gap-2">
+                                    <PackageSearch className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Orders</span>
+                                </Link>
+                            </Button>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <ClerkLoaded>
+                                {isSignedIn ? (
+                                    <div className="flex items-center gap-3">
+                                        <UserButton />
+                                        <span className="hidden md:inline text-sm text-gray-700 dark:text-gray-300">
+                                            Welcome back, {user?.firstName || 'User'}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <SignInButton mode="modal">
+                                        <Button size="sm" variant="default" className="bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white min-w-[100px]">
+                                            Sign In
+                                        </Button>
+                                    </SignInButton>
                                 )}
-                            </div>
-                            <span className="hidden sm:inline">My Basket</span>
-                        </Link>
-
-                        <Link
-                            href="/orders"
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
-                        >
-                            <Package className="w-5 h-5" />
-                            <span className="hidden sm:inline">My Orders</span>
-                        </Link>
-
-                        <ClerkLoaded>
-                            {isSignedIn ? (
-                                <UserButton />
-                            ) : (
-                                <SignInButton mode="modal">
-                                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                        Sign In
-                                    </button>
-                                </SignInButton>
-                            )}
-                        </ClerkLoaded>
+                            </ClerkLoaded>
+                        </div>
                     </div>
                 </div>
             </nav>

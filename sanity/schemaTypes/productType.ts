@@ -33,15 +33,79 @@ export const productType = defineType( {
             },
         }),
         defineField({
+            name: 'additionalImages',
+            title: 'Additional Images',
+            type: 'array',
+            description: 'Add multiple images for the product carousel',
+            of: [
+                {
+                    type: 'image',
+                    options: {
+                        hotspot: true,
+                    },
+                },
+            ],
+        }),
+        defineField({
             name: 'description',
             title: 'Description',
             type: 'blockContent',
         }),
         defineField({
-            name: 'price',
-            title: 'Price',
+            name: 'basePrice',
+            title: 'Base Price',
             type: 'number',
             validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+            name: 'variants',
+            title: 'Storage/RAM Variants',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        {
+                            name: 'storage',
+                            title: 'Storage',
+                            type: 'string',
+                            options: {
+                                list: [
+                                    { title: '128GB', value: '128' },
+                                    { title: '256GB', value: '256' },
+                                    { title: '512GB', value: '512' },
+                                    { title: '1TB', value: '1024' }
+                                ]
+                            }
+                        },
+                        {
+                            name: 'ram',
+                            title: 'RAM',
+                            type: 'string',
+                            options: {
+                                list: [
+                                    { title: '4GB', value: '4' },
+                                    { title: '6GB', value: '6' },
+                                    { title: '8GB', value: '8' },
+                                    { title: '12GB', value: '12' }
+                                ]
+                            }
+                        },
+                        {
+                            name: 'additionalPrice',
+                            title: 'Additional Price',
+                            type: 'number',
+                            validation: (Rule) => Rule.required()
+                        },
+                        {
+                            name: 'stock',
+                            title: 'Stock',
+                            type: 'number',
+                            validation: (Rule) => Rule.required()
+                        }
+                    ]
+                }
+            ]
         }),
         defineField({
             name: 'currency',
@@ -64,18 +128,12 @@ export const productType = defineType( {
             type: 'array',
             of: [{type: 'reference', to: {type: 'category'}}],
         }),
-        defineField({
-            name: 'stock',
-            title: 'Stock',
-            type: 'number',
-            validation: (Rule) => Rule.required(),
-        }),
     ],
     preview: {
         select: {
             title: 'name',
             media: 'image',
-            price: 'price',
+            basePrice: 'basePrice',
             currency: 'currency'
         },
         prepare(select) {
@@ -89,7 +147,7 @@ export const productType = defineType( {
             return {
                 title: select.title,
                 media: select.media,
-                subtitle: `${symbol}${select.price}`,
+                subtitle: `${symbol}${select.basePrice}`,
             };
         },
     },

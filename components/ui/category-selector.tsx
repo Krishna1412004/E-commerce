@@ -31,19 +31,19 @@ export function CategorySelectorComponent({ categories, }: CategorySelectorProps
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant="outline"
+                    variant="default"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-[200px] justify-between bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white"
                 >
                     {value
                         ? categories.find((category) => category._id === value)?.title
-                        : " Filter by Category"}
+                        : "Filter by Category"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
-                <Command>
+            <PopoverContent className="w-[200px] p-0 border-gray-200 dark:border-gray-800">
+                <Command className="bg-white dark:bg-gray-950">
                     <CommandInput placeholder="Search Category..." className="h-9" onKeyDown={(e) => {
                         if (e.key === "Enter") {
                             const selectedCategory = categories.find((c) =>
@@ -67,14 +67,14 @@ export function CategorySelectorComponent({ categories, }: CategorySelectorProps
                         }
                     }} />
      
-
-                    <CommandList>
-                        <CommandEmpty>No Category found.</CommandEmpty>
+                    <CommandList className="dark:bg-gray-950 dark:text-gray-200">
+                        <CommandEmpty className="dark:text-gray-400">No Category found.</CommandEmpty>
                         <CommandGroup>
                             {categories.map((category) => (
                                 <CommandItem
                                     key={category._id}
                                     value={category.title}
+                                    className="dark:text-gray-200 dark:hover:bg-gray-800"
                                     onSelect={() => {
                                         console.log("Selected category:", category);
                                         console.log("Slug:", category.slug);

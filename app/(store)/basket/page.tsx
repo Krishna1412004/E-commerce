@@ -124,16 +124,16 @@ function BasketPage() {
                         </div>
                     ))}
                 </div>
-                <div className="w-full lg:w-80 lg:sticky lg:top-4 h-fit bg-white p-6 border rounded
+                <div className="w-full lg:w-80 lg:sticky lg:top-4 h-fit bg-white dark:bg-gray-900 p-6 border rounded dark:border-gray-800
                 order-first lg:order-last fixed bottom-0 left-0 lg:left-auto">
-                <h3 className="text-xl font-semibold">Order Summary</h3>
+                <h3 className="text-xl font-semibold dark:text-white">Order Summary</h3>
                 <div className="mt-4 space-y-2">
-                <p className="flex justify-between">
+                <p className="flex justify-between dark:text-gray-300">
                     <span>Items</span>
                     <span>{groupedItems.reduce((total, item) => total + item.quantity, 0)}
                     </span>
                     </p>
-                    <p className="flex justify-between text-2xl font-bold border-t pt-2">
+                    <p className="flex justify-between text-2xl font-bold border-t dark:border-gray-700 pt-2 dark:text-white">
                         <span>Total:</span>
                         <span>
                             {groupedItems[0]?.product.currency === 'inr' ? '₹' : 
@@ -147,14 +147,14 @@ function BasketPage() {
                     <button
                     onClick={handleCheckout}
                     disabled={isLoading}
-                    className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400"
+                    className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 dark:hover:bg-blue-700 transition-colors"
                     >
                     {isLoading ? "Processing..." : "Checkout"}
                     </button>
                 ) : (
                     <SignInButton mode="modal">
                         <button className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded
-                    hover:bg-blue-600">Sign In to Checkout</button>
+                    hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Sign In to Checkout</button>
                     </SignInButton>
                 )}
                 </div>

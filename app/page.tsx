@@ -4,6 +4,23 @@ import { getCategories } from "@/sanity/lib/categories/getCategories";
 import BlackFridayBanner from "@/components/ui/BlackFridayBanner";
 import CategoryFilter from "@/components/ui/CategoryFilter";
 import { CategorySelectorComponent } from "@/components/ui/category-selector";
+import { Image } from "sanity";
+
+// Define product type to match ProductsView.tsx
+interface Product {
+  _id: string;
+  name: string;
+  description?: any; // Sanity block content
+  price: number;
+  slug: string;
+  image?: Image;
+  category?: {
+    _id: string;
+    name: string;
+    slug?: string;
+  };
+}
+
 export default async function Home() {
   const products = await getProducts();
   const categories = await getCategories();
@@ -14,7 +31,7 @@ export default async function Home() {
       <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Latest Products</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Top Flagship Smartphones</h1>
             <CategorySelectorComponent categories={categories} />
           </div>
           <ProductsView products={products || []} categories={categories || []} />
