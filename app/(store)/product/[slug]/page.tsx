@@ -3,19 +3,16 @@ import { notFound } from "next/navigation";
 import { groq } from "next-sanity";
 import { ProductView } from "@/components/ui/ProductView";
 
-/**
- * Use a loose 'any' typing for route props to avoid Next.js 15 PageProps
- * constraint issues during build. This is a localized workaround for that bug.
- */
-type Product = any; // you can replace with a proper type later
+interface Props {
+  params: Promise<{ slug: string }> | { slug: string }; // <-- allow both
+}
 
-async function getProduct(slug: string): Promise<Product | null> {
+async function getProduct(slug: string) {
   if (!slug) {
     console.log("No slug provided to getProduct");
     return null;
   }
 
-  // Debug: list all products (optional, remove later if noisy)
   const allProductsQuery = groq`*[_type == "product"]{
     _id,
     name,
@@ -27,7 +24,7 @@ async function getProduct(slug: string): Promise<Product | null> {
     console.log("All available products:", allProducts);
     console.log("Looking for slug:", slug);
 
-    const query = groq`*[_type == "product" && slug.current == $slug][0]{
+    const query = groq`*[_type == "product" && slug.current match $slug][0]{
       _id,
       name,
       basePrice,
@@ -40,13 +37,13 @@ async function getProduct(slug: string): Promise<Product | null> {
           url
         }
       },
-      "additionalImages": additionalImages[]{
+      "additionalImages": additionalImages[] {
         asset->{
           _id,
           url
         }
       },
-      variants[]{
+      variants[] {
         storage,
         ram,
         additionalPrice,
@@ -57,21 +54,16 @@ async function getProduct(slug: string): Promise<Product | null> {
 
     const product = await client.fetch(query, { slug });
     console.log("Found product:", product);
-    return product ?? null;
+    return product;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;
   }
 }
 
-/**
- * Page component - uses `any` for params to avoid Next.js 15 typing issues.
- */
-export default async function Page({ params }: any) {
-  // `params` can sometimes be provided as a Promise internally in Next.js 15,
-  // but using `any` avoids the build-time PageProps constraint.
-  const resolvedParams = await Promise.resolve(params);
-  const slug: string | undefined = resolvedParams?.slug;
+export default async function Page({ params }: Props) {
+  const resolvedParams = await Promise.resolve(params); // <-- handles both sync/async cases
+  const slug = resolvedParams?.slug;
 
   if (!slug) {
     console.log("No slug in params");
@@ -88,12 +80,9 @@ export default async function Page({ params }: any) {
   return <ProductView product={product} />;
 }
 
-/**
- * generateMetadata for the page (also uses any for params)
- */
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: Props) {
   const resolvedParams = await Promise.resolve(params);
-  const slug: string | undefined = resolvedParams?.slug;
+  const slug = resolvedParams?.slug;
 
   if (!slug) {
     return { title: "Product Not Found" };
