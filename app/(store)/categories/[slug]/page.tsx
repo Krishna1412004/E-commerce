@@ -3,8 +3,8 @@ import { getAllCategories } from "@/sanity/lib/products/getAllCategories";
 import { getProductByCategory } from "@/sanity/lib/products/getProductsByCategory";
 
 
-export default async function CategoryPage({ params }: {params : Promise<{slug: string}>}) {
-    const { slug } = await params;
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const products = await getProductByCategory(slug);
     const categories = await getAllCategories();
 

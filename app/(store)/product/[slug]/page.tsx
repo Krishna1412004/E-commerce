@@ -4,7 +4,7 @@ import { groq } from "next-sanity";
 import { ProductView } from "@/components/ui/ProductView";
 
 interface Props {
-  params: Promise<{ slug: string }> | { slug: string }; // <-- allow both
+  params: { slug: string };
 }
 
 async function getProduct(slug: string) {
@@ -62,8 +62,7 @@ async function getProduct(slug: string) {
 }
 
 export default async function Page({ params }: Props) {
-  const resolvedParams = await Promise.resolve(params); // <-- handles both sync/async cases
-  const slug = resolvedParams?.slug;
+  const slug = params?.slug;
 
   if (!slug) {
     console.log("No slug in params");
@@ -81,8 +80,7 @@ export default async function Page({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const resolvedParams = await Promise.resolve(params);
-  const slug = resolvedParams?.slug;
+  const slug = params?.slug;
 
   if (!slug) {
     return { title: "Product Not Found" };
